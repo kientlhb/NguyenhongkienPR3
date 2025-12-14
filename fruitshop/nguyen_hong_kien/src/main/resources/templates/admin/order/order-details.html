@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <title>Chi tiết đơn hàng</title>
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+    <style>
+        body { background: #f5f7fb; font-family: "Inter", sans-serif; margin: 0; }
+        .page-container { width: 100%; padding: 25px 40px; }
+        .card-custom { border-radius: 18px; padding: 25px; background: #fff; box-shadow: 0px 6px 20px rgba(0,0,0,0.08); border: none; width: 100%; }
+        .table-wrapper { border-radius: 16px; overflow: hidden; border: 2px solid #000; width: 100%; margin-top: 20px; }
+        .table { width: 100%; border-collapse: collapse; table-layout: fixed; }
+        .table thead th { background: #ebeff7; color: #003566; text-transform: uppercase; font-weight: 700; text-align: center; border-bottom: 2px solid #003566; padding: 12px 8px; }
+        .table tbody td { padding: 10px 8px; text-align: center; word-wrap: break-word; }
+        .btn-back { margin-top: 15px; background: #6c757d; border: none; padding: 8px 16px; border-radius: 10px; color: #fff; cursor: pointer; }
+        .btn-back:hover { background: #5a6268; }
+    </style>
+</head>
+<body>
+<div class="page-container">
+    <div class="card-custom">
+        <h2>Chi tiết đơn hàng <span th:text="${order.id}"></span></h2>
+        <p><strong>Khách hàng:</strong> <span th:text="${order.user.username}"></span></p>
+        <p><strong>Ngày đặt:</strong> <span th:text="${#temporals.format(order.orderDate,'dd/MM/yyyy HH:mm')}"></span></p>
+        <p><strong>Tổng tiền:</strong> <span th:text="${order.totalPrice} + ' ₫'"></span></p>
+        <p><strong>Trạng thái:</strong> <span th:text="${order.status}"></span></p>
+
+        <h4>Danh sách sản phẩm</h4>
+        <div class="table-wrapper">
+            <table class="table">
+                <thead>
+                <tr>
+                    <th>STT</th>
+                    <th>Sản phẩm</th>
+                    <th>Số lượng</th>
+                    <th>Đơn giá</th>
+                    <th>Thành tiền</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="item, stat : ${order.orderItems}">
+                    <td th:text="${stat.index + 1}"></td>
+                    <td th:text="${item.product.name}"></td>
+                    <td th:text="${item.quantity}"></td>
+                    <td th:text="${item.price} + ' ₫'"></td>
+                    <td th:text="${item.quantity * item.price} + ' ₫'"></td>
+                </tr>
+                <tr th:if="${order.orderItems.size() == 0}">
+                    <td colspan="5">Chưa có sản phẩm nào.</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+        <a th:href="@{/admin/orders}" class="btn-back">Quay lại</a>
+    </div>
+</div>
+</body>
+</html>
